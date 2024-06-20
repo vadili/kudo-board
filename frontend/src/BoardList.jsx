@@ -4,13 +4,14 @@ import "./BoardList.css";
 
 
 function BoardList(props) {
+
     return (
         <div className="board-list">
 
             {
                 props.boards &&
                 props.boards.map((board, id)=> {
-                    return <Board id = {id} removeboard={props.removeboard} title={board.title} category={board.category} displayBoard={props.handleDisplayBoardPage}/>
+                    return <Board key={id} id = {id} removeboard={props.removeboard} title={board.title} category={board.category} displayBoard={props.handleDisplayBoardPage}/>
                 })
             }
 

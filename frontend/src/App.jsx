@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css'
 import Header from "./Header";
 import SearchBar from "./SearchBar";
@@ -7,6 +8,7 @@ import BoardList from "./BoardList";
 import Footer from "./Footer";
 import CreateForm from "./CreateForm";
 import CardList from "./CardList";
+import BoardPage from './BoardPage';
 
 function App() {
   const [displayCreateForm, setDisplayCreateForm] = useState(false);
@@ -28,40 +30,85 @@ function App() {
     setDisplayCreateForm(!displayCreateForm);
   }
 
+  // async function handleFetch() {
+  //   try{
+  //     const url = userId
+  //     ? `http://localhost:3001/boards/user/${userId}`
+  //     : 'http://localhost:3001/boards'
+  //     const response = await fetch(url, {
+  //       method: 'GET',
+  //       headers: {
+
+  //       },
+  //     });
+  //     const data = await response.json();
+  //     setboards(data)
+  //   } catch(err) {
+  //     console.log(err)
+  //   }
+  // }
+  useEffect(() => {
+    const getBoards = async () => {
+      try{
+        const backendUrlAccess = import.meta.env.VITE_BACKEND_ADDRESS;
+        const response = await fetch(`${backendUrlAccess}/boards`);
+        if (!response.ok) {
+          throw new Error('Something went wrong!');
+        }
+        const data = await response.json();
+        setBoards(data);
+      }
+      catch(error) {
+        console.error(error);
+      }
+    };
+
+    getBoards();
+  }, []);
+
   return (
-    <div className="App">
+    <Router>
+      <div className="App">
+        <Header />
+        <Routes>
+          <Route path='/' element={
+            <div>
+              {displayCreateForm ? (
+                <CreateForm addboard = {setboards} displayForm={handleDisplayCreateForm} />
+              ) : null}
 
-      {displayCreateForm ? (
-        <CreateForm addboard = {setboards} displayForm={handleDisplayCreateForm} />
-      ) : null}
 
 
 
-      <Header />
-      <main>
+              <main>
 
-        {/* <CardList/> */}
+                {/* <CardList/> */}
 
-        <SearchBar />
-        <div className="buttons">
-          <Button onClick={() => handleCategoryChange('All')} name="All" />
-          <Button onClick={() => handleCategoryChange('recent')} name="Recent" />
-          <Button onClick={() => handleCategoryChange('celebration')} name="Celebration" />
-          <Button onClick={() => handleCategoryChange('thank you')} name="Thank You" />
-          <Button onClick={() => handleCategoryChange('inspiration')} name="Inspiration" />
-        </div>
+                <SearchBar />
+                <div className="buttons">
+                  <Button onClick={() => handleCategoryChange('All')} name="All" />
+                  <Button onClick={() => handleCategoryChange('recent')} name="Recent" />
+                  <Button onClick={() => handleCategoryChange('celebration')} name="Celebration" />
+                  <Button onClick={() => handleCategoryChange('thank you')} name="Thank You" />
+                  <Button onClick={() => handleCategoryChange('nspiration')} name="Inspiration" />
+                </div>
 
-        <div className="create-buttons">
-          <Button
-            name="Create New Board"
-            displayForm={handleDisplayCreateForm}
-          />
-        </div>
-        <BoardList removeboard = {setboards} boards = {filteredItems} handleDisplayBoardPage={handleDisplayBoardPage} />
-      </main>
-      <Footer />
-    </div>
+                <div className="create-buttons">
+                  <Button
+                    name="Create New Board"
+                    displayForm={handleDisplayCreateForm}
+                  />
+                </div>
+                <BoardList removeboard = {setboards} boards = {filteredItems} handleDisplayBoardPage={handleDisplayBoardPage} />
+              </main>
+              <Footer />
+            </div>
+          } />
+          <Route path="/boardpage" element={<BoardPage />} />
 
+        </Routes>
+      </div>
+    </Router>
   )
 }
 
