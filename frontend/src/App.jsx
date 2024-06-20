@@ -5,6 +5,7 @@ import SearchBar from "./SearchBar";
 import Button from "./Button";
 import BoardList from "./BoardList";
 import Footer from "./Footer";
+import CreateForm from "./CreateForm";
 
 function App() {
   const [displayCreateForm, setDisplayCreateForm] = useState(false);
@@ -20,6 +21,11 @@ function App() {
 
   return (
     <div className="App">
+
+      {displayCreateForm ? (
+        <CreateForm displayForm={handleDisplayCreateForm} />
+      ) : null}
+
       <Header />
       <main>
         <SearchBar />
