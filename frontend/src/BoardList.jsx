@@ -9,8 +9,8 @@ function BoardList(props) {
 
             {
                 props.boards &&
-                props.boards.map((board)=> {
-                    return <Board title={board.title} category={board.category} displayBoard={props.handleDisplayBoardPage}/>
+                props.boards.map((board, id)=> {
+                    return <Board id = {id} removeboard={props.removeboard} title={board.title} category={board.category} displayBoard={props.handleDisplayBoardPage}/>
                 })
             }
 

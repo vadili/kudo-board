@@ -12,7 +12,13 @@ function App() {
   const [displayCreateForm, setDisplayCreateForm] = useState(false);
   const [displayBoardPage, setDisplayBoardPage] = useState(false);
   const [boards, setboards] = useState([]);
-  console.log(boards)
+  const [selectedCategory, setSelectedCategory] = useState('All');
+  const handleCategoryChange = (category) => {
+    setSelectedCategory(category);
+  };
+
+  const filteredItems = selectedCategory === 'All' ? boards : boards.filter(item => item.category === selectedCategory);
+
 
   function handleDisplayBoardPage() {
     setDisplayBoardPage(!displayBoardPage);
@@ -38,11 +44,11 @@ function App() {
 
         <SearchBar />
         <div className="buttons">
-          <Button name="All" />
-          <Button name="Recent" />
-          <Button name="Celebration" />
-          <Button name="Thank You" />
-          <Button name="Inspiration" />
+          <Button onClick={() => handleCategoryChange('All')} name="All" />
+          <Button onClick={() => handleCategoryChange('recent')} name="Recent" />
+          <Button onClick={() => handleCategoryChange('celebration')} name="Celebration" />
+          <Button onClick={() => handleCategoryChange('thank you')} name="Thank You" />
+          <Button onClick={() => handleCategoryChange('inspiration')} name="Inspiration" />
         </div>
 
         <div className="create-buttons">
@@ -51,7 +57,7 @@ function App() {
             displayForm={handleDisplayCreateForm}
           />
         </div>
-        <BoardList boards = {boards} handleDisplayBoardPage={handleDisplayBoardPage} />
+        <BoardList removeboard = {setboards} boards = {filteredItems} handleDisplayBoardPage={handleDisplayBoardPage} />
       </main>
       <Footer />
     </div>
