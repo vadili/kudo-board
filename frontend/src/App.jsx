@@ -6,10 +6,13 @@ import Button from "./Button";
 import BoardList from "./BoardList";
 import Footer from "./Footer";
 import CreateForm from "./CreateForm";
+import CardList from "./CardList";
 
 function App() {
   const [displayCreateForm, setDisplayCreateForm] = useState(false);
   const [displayBoardPage, setDisplayBoardPage] = useState(false);
+  const [boards, setboards] = useState([]);
+  console.log(boards)
 
   function handleDisplayBoardPage() {
     setDisplayBoardPage(!displayBoardPage);
@@ -23,11 +26,16 @@ function App() {
     <div className="App">
 
       {displayCreateForm ? (
-        <CreateForm displayForm={handleDisplayCreateForm} />
+        <CreateForm addboard = {setboards} displayForm={handleDisplayCreateForm} />
       ) : null}
+
+
 
       <Header />
       <main>
+
+        {/* <CardList/> */}
+
         <SearchBar />
         <div className="buttons">
           <Button name="All" />
@@ -43,7 +51,7 @@ function App() {
             displayForm={handleDisplayCreateForm}
           />
         </div>
-        <BoardList handleDisplayBoardPage={handleDisplayBoardPage} />
+        <BoardList boards = {boards} handleDisplayBoardPage={handleDisplayBoardPage} />
       </main>
       <Footer />
     </div>
