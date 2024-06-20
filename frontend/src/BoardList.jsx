@@ -6,12 +6,13 @@ import "./BoardList.css";
 function BoardList(props) {
     return (
         <div className="board-list">
-            <Board displayBoard={props.handleDisplayBoardPage}/>
-            <Board displayBoard={props.handleDisplayBoardPage}/>
-            <Board displayBoard={props.handleDisplayBoardPage}/>
-            <Board displayBoard={props.handleDisplayBoardPage}/>
-            <Board displayBoard={props.handleDisplayBoardPage}/>
-            <Board displayBoard={props.handleDisplayBoardPage}/>
+
+            {
+                props.boards &&
+                props.boards.map((board)=> {
+                    return <Board title={board.title} category={board.category} displayBoard={props.handleDisplayBoardPage}/>
+                })
+            }
 
 
         </div>

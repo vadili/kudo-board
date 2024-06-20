@@ -1,14 +1,28 @@
+import { useState } from "react";
 import "./CreateForm.css";
 
 function CreateForm(props) {
+  const [formfield, setformfield] = useState({"title": "", "category": "", "author": ""})
+  const handleInputChange = (e) => {
+    const {name, value} = e.target;
+    setformfield({
+      ...formfield,
+      [name]: value
+    });
+  };
+  function handleCreateBoard(e) {
+    e.preventDefault()
+    props.addboard((prev) => [...prev, formfield])
+  }
+
   return (
     <div id="create-form" className="modal-overlay">
         <div className="modal-content">
             <span className="close" onClick={props.displayForm}>&times;</span>
             <h1>Create a new post</h1>
             <form>
-                <input type="text" placeholder="Title" />
-                <select>
+                <input name="title" type="text" placeholder="Title"  value={formfield.title} onChange={handleInputChange}/>
+                <select name = "category" value = {formfield.category} onChange = {handleInputChange}>
                     <option value="public">Select a category</option>
                     <option value="recent">Recent</option>
                     <option value="celebration">Celebration</option>
@@ -17,10 +31,8 @@ function CreateForm(props) {
                 </select>
 
 
-
-
-                <input type="text" placeholder="Author" />
-                <button className="create-button">Create Board</button>
+                <input name = "author" type="text" placeholder="Author" value = {formfield.author} onChange = {handleInputChange}/>
+                <button className="create-button" onClick = {(e) => handleCreateBoard(e)}>Create Board</button>
             </form>
         </div>
 
