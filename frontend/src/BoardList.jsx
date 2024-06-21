@@ -4,19 +4,25 @@ import "./BoardList.css";
 
 
 function BoardList(props) {
+
     return (
         <div className="board-list">
+            {props.boards.map((board, id) => (
+                <Board
+                    key={id}
+                    id={id}
+                    board={board}
+                    removeBoard={props.removeBoard}
+                    onBoardSelect={props.onBoardSelect}
+                    title={board.title}
+                    category={board.category}
+                />
 
-            {
-                props.boards &&
-                props.boards.map((board)=> {
-                    return <Board title={board.title} category={board.category} displayBoard={props.handleDisplayBoardPage}/>
-                })
-            }
 
+            ))}
 
         </div>
-    )
+    );
 }
 
 export default BoardList;

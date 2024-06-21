@@ -1,8 +1,6 @@
 import { useState } from "react";
 import Button from "./Button";
-import "./CardList.css"
-
-
+import "./CardList.css";
 
 function CardList(props) {
     const [votecount, setvotecount] = useState(0)
