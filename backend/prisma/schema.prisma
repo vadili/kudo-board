@@ -20,6 +20,7 @@ model Board {
   author String?
   createdAt DateTime @default(now())
   cards Card[]
+  imageURL String
 }
 
 model Card {
