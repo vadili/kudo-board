@@ -1,17 +1,18 @@
 import React, {useState} from 'react';
 import "./Board.css";
 
-import { useLocation, Navigate } from 'react-router-dom';
+// import { useLocation, Navigate } from 'react-router-dom';
 
-const boardImg = 'https://picsum.photos/200';
+// const boardImg = 'https://picsum.photos/200';
 
 
 function Board(props) {
 
-    const [openView, setOpenView] = useState(false)
+    // const [openView, setOpenView] = useState(false)
 
     const openBoardView = () => {
-        setOpenView(true)
+        props.onBoardSelect(props.board);
+        // setOpenView(true)
     }
 
     function handleDeleteButton(id) {
@@ -19,13 +20,7 @@ function Board(props) {
     }
     return (
         <div className="board">
-            {
-                openView && (
-                    <Navigate to="/boardpage" replace={true} />
-                )
-            }
-
-            <img src={boardImg} alt='board'/>
+            <img src={props.board.image} alt='board'/>
             <h3>{props.title}</h3>
             <p>{props.category}</p>
             <div className="delete-and-view-buttons">

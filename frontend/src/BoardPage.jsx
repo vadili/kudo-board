@@ -1,15 +1,19 @@
-import { useState } from "react";
-import Button from "./Button";
 import "./BoardPage.css"
 import CardList from "./CardList";
 
+function BoardPage({ board }) {
+    if (!board) {
+        return <div>No board selected.</div>;
+    }
 
-
-function BoardPage(props) {
 
     return (
-        <CardList />
-    )
-}
+        <div className="board-page">
+            <h2>{board.title}</h2>
+            <p>{board.category}</p>
+            <CardList />
+        </div>
+    );
+ }
 
 export default BoardPage;
