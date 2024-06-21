@@ -25,12 +25,16 @@ app.get('/boards', async (req, res) => {
 app.post('/boards', async (req, res) => {
     const { title, category, author, image } = req.body;
     try {
+        const giphyResponse = await fetch(`https://api.giphy.com/v1/gifs/random?api_key=${process.env.GIPHY_API_KEY}`)
+        const gifData = await giphyResponse.json();
+        const imageURL = gifData.data.images.original.url;
+
         const newBoard = await prisma.board.create({
             data: {
                 title,
                 category,
                 author,
-                image
+                image: imageURL
             }
         });
         res.status(201).json(newBoard);

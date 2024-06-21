@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./CreateForm.css";
 
-function CreateForm(props) {
+function CreateForm({onCreate, displayForm, onClose}) {
   const [formfield, setformfield] = useState({"title": "", "category": "", "author": ""})
   const handleInputChange = (e) => {
     const {name, value} = e.target;
@@ -10,19 +10,28 @@ function CreateForm(props) {
       [name]: value
     });
   };
-  function handleCreateBoard(e) {
-    e.preventDefault()
-    props.addboard((prev) => [...prev, formfield])
-  }
+  const [title, setTitle] = useState('')
+  const [category, setCategory] = useState('')
+  const [author, setAuthor] = useState('')
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const newBoard = {
+      title,
+      category,
+      author,
+    };
+    onCreate(newBoard);
+    onClose();
+  };
 
   return (
     <div id="create-form" className="modal-overlay">
         <div className="modal-content">
-            <span className="close" onClick={props.displayForm}>&times;</span>
+            <span className="close" onClick={onClose}>&times;</span>
             <h1>Create a new post</h1>
-            <form>
-                <input name="title" type="text" placeholder="Title"  value={formfield.title} onChange={handleInputChange}/>
-                <select name = "category" value = {formfield.category} onChange = {handleInputChange}>
+            <form onSubmit={handleSubmit}>
+                <input name="title" type="text" placeholder="Title"  value={title} onChange={(e) => setTitle(e.target.value)}/>
+                <select name = "category" value = {category} onChange={(e) => setCategory(e.target.value)}>
                     <option value="public">Select a category</option>
                     <option value="recent">Recent</option>
                     <option value="celebration">Celebration</option>
@@ -31,8 +40,8 @@ function CreateForm(props) {
                 </select>
 
 
-                <input name = "author" type="text" placeholder="Author" value = {formfield.author} onChange = {handleInputChange}/>
-                <button className="create-button" onClick = {(e) => handleCreateBoard(e)}>Create Board</button>
+                <input name = "author" type="text" placeholder="Author" value = {author} onChange={(e) => setAuthor(e.target.value)}/>
+                <button className="create-button" >Create Board</button>
             </form>
         </div>
 

@@ -8,6 +8,7 @@ import BoardList from "./BoardList";
 import Footer from "./Footer";
 import CreateForm from "./CreateForm";
 import BoardPage from './BoardPage';
+import Board from './Board';
 
 function App() {
   const [displayCreateForm, setDisplayCreateForm] = useState(false);
@@ -15,20 +16,109 @@ function App() {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const navigate = useNavigate();
 
+
+  console.log("selected cat", selectedCategory)
+
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
   };
 
   const filteredItems = selectedCategory === 'All' ? boards : boards.filter(item => item.category === selectedCategory);
 
-  function handleDisplayCreateForm() {
-    setDisplayCreateForm(!displayCreateForm);
+  console.log("filteredItems,", filteredItems)
+
+ function handleOpenCreateForm() {
+    setDisplayCreateForm(true);
+  }
+
+  function handleCloseCreateForm() {
+    setDisplayCreateForm(false);
   }
 
   const handleBoardSelect = (board) => {
     navigate('/boardpage', { state: { board } });
   }
 
+  const fetchBoards = () => {
+    fetch(`${import.meta.env.VITE_BACKEND_ADDRESS}/boards`)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(data => {
+      setBoards(data);
+    })
+    .catch(error => {
+      console.error('Error fetching photo:', error);
+    });
+  };
+
+  const handleCreateBoard = (newBoard) => {
+    fetch(`${import.meta.env.VITE_BACKEND_ADDRESS}/boards`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newBoard),
+      }
+    )
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(data => {
+      fetchBoards();
+    })
+    .catch(error => {
+      console.error('Error fetching photo:', error);
+    });
+  }
+
+  function handleDeleteButton(id) {
+    fetch(`${import.meta.env.VITE_BACKEND_ADDRESS}/boards/${id}`,
+    {
+      method: "DELETE",
+      headers: {
+        "Content-Type" : "application/json"
+      }
+    })
+    .then(response => {
+      if (response.ok){
+        setBoards(boards.filter(board => board.id !== id))
+      }else{
+        cconsole.error("Error deleting board")
+      }
+    })
+    .then(data => {fetchBoards()
+    })
+    .catch(error => {
+      console.error('Error fetching photo: ', error)
+    })
+
+
+    // removeBoard(prevItems => prevItems.filter((index) => index !== id))
+}
+const kudoboard = filteredItems.map(board => {
+  return(
+    <Board
+        key={board.id}
+        id={board.id}
+        board = {board}
+        imageURL = {board.imageURL}
+        onDelete={() => handleDeleteButton(board.id)}
+        title={board.title}
+        category={board.category}
+        onBoardSelect={handleBoardSelect}
+        boards={filteredItems}
+              />
+
+  )
+})
   useEffect(() => {
     const getBoards = async () => {
       try {
@@ -54,13 +144,13 @@ function App() {
           <Route path='/' element={
             <div>
               {displayCreateForm ? (
-                <CreateForm addBoard={setBoards} displayForm={handleDisplayCreateForm} />
+                <CreateForm addBoard={setBoards} displayForm={handleOpenCreateForm} onCreate ={handleCreateBoard} onClose={handleCloseCreateForm}/>
               ) : null}
               <main>
                 <SearchBar />
                 <div className="buttons">
                   <Button onClick={() => handleCategoryChange('All')} name="All" />
-                  <Button onClick={() => handleCategoryChange('recent')} name="Recent" />
+                  <Button onClick={() => handleCategoryChange('recent')} name="Recent"/>
                   <Button onClick={() => handleCategoryChange('celebration')} name="Celebration" />
                   <Button onClick={() => handleCategoryChange('thank you')} name="Thank You" />
                   <Button onClick={() => handleCategoryChange('inspiration')} name="Inspiration" />
@@ -68,10 +158,11 @@ function App() {
                 <div className="create-buttons">
                   <Button
                     name="Create New Board"
-                    displayForm={handleDisplayCreateForm}
+                    displayForm={handleOpenCreateForm}
                   />
                 </div>
-                <BoardList boards={filteredItems} onBoardSelect={handleBoardSelect} />
+                {kudoboard}
+                {/* <BoardList boards={filteredItems} onBoardSelect={handleBoardSelect} /> */}
               </main>
               <Footer />
             </div>
