@@ -16,16 +16,11 @@ function App() {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const navigate = useNavigate();
 
-
-  console.log("selected cat", selectedCategory)
-
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
   };
 
   const filteredItems = selectedCategory === 'All' ? boards : boards.filter(item => item.category === selectedCategory);
-
-  console.log("filteredItems,", filteredItems)
 
  function handleOpenCreateForm() {
     setDisplayCreateForm(true);
@@ -36,7 +31,7 @@ function App() {
   }
 
   const handleBoardSelect = (board) => {
-    navigate('/boardpage', { state: { board } });
+    navigate(`/boards/${board.id}`);
   }
 
   const fetchBoards = () => {
@@ -99,8 +94,6 @@ function App() {
     .catch(error => {
       console.error('Error fetching photo: ', error)
     })
-
-
     // removeBoard(prevItems => prevItems.filter((index) => index !== id))
 }
 const kudoboard = filteredItems.map(board => {
@@ -167,7 +160,8 @@ const kudoboard = filteredItems.map(board => {
               <Footer />
             </div>
           } />
-          <Route path="/boardpage" element={<BoardPage />} />
+          <Route path="/boards" element={<BoardPage />} />
+          <Route path="/boards/:id" element={<BoardPage />} />
         </Routes>
       </div>
   );
