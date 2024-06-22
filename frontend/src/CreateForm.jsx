@@ -16,6 +16,7 @@ const CreateForm = ({ onCreate, onClose }) => {
     return (
         <div className="create-form">
             <form onSubmit={handleSubmit}>
+              <h3>Create a New Board</h3>
                 <label>Title:</label>
                 <input
                     type="text"
@@ -23,18 +24,22 @@ const CreateForm = ({ onCreate, onClose }) => {
                     onChange={(e) => setTitle(e.target.value)}
                 />
                 <label>Category:</label>
-                <input
-                    type="text"
-                    value={category}
-                    onChange={(e) => setCategory(e.target.value)}
-                />
+                <select value={category} onChange={(e) => setCategory(e.target.value)}>
+                  <option value="">All</option>
+                  <option value="recent">Recent</option>
+                  <option value="celebration">Celebration</option>
+                  <option value="inspiration">Inspiration</option>
+                  <option value="thank you">Thank You</option>
+                </select>
+
+
                 <label>Author:</label>
                 <input
                     type="text"
                     value={author}
                     onChange={(e) => setAuthor(e.target.value)}
                 />
-                <button type="submit">Create</button>
+                <button type="submit">Create Board</button>
                 <button type="button" onClick={onClose}>Cancel</button>
             </form>
         </div>

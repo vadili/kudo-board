@@ -20,3 +20,8 @@
   .all-button {
     color: black !important;
   }
+
+  .kudo-board {
+    display: flex;
+    flex-wrap: wrap;
+  }

@@ -2,9 +2,12 @@ import "./Button.css"
 
 function Button(props) {
     return (
+
         <button onClick={() =>
-            {props.name.includes("Create") ? props.displayForm():props.onClick()}
-                }>{props.name}</button>
+            {props.onClick()}
+                }>{props.name}
+            {props.children}
+        </button>
     )
 }
 

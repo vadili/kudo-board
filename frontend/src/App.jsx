@@ -16,7 +16,7 @@ function App() {
   const navigate = useNavigate();
 
   const handleCategoryChange = (category) => {
-  setSelectedCategory(category);
+    setSelectedCategory(category);
 };
 
 const filteredItems = selectedCategory === 'All' ? boards : boards.filter(item => item.category === selectedCategory);
@@ -108,7 +108,7 @@ const kudoboard = filteredItems.map(board => (
 useEffect(() => {
 fetchBoards();
 }, []);
-
+console.log(filteredItems)
 return (
 <div className="App">
 <Header />
@@ -122,11 +122,10 @@ return (
 <SearchBar />
 <div className="buttons">
 <Button onClick={() => handleCategoryChange('All')}><p className='all-button'>All</p></Button>
-<Button onClick={() => handleCategoryChange('Work')}><p className='all-button'>Work</p></Button>
-<Button onClick={() => handleCategoryChange('Family')}><p className='all-button'>Family</p></Button>
-<Button onClick={() => handleCategoryChange('Friends')}><p className='all-button'>Friends</p></Button>
-<Button onClick={() => handleCategoryChange('Appreciation')}><p className='all-button'>Appreciation</p></Button>
-<Button onClick={() => handleCategoryChange('Farewell')}><p className='all-button'>Farewell</p></Button>
+<Button onClick={() => handleCategoryChange('recent')}><p className='all-button'>Recent</p></Button>
+<Button onClick={() => handleCategoryChange('celebration')}><p className='all-button'>Celebration</p></Button>
+<Button onClick={() => handleCategoryChange('thank you')}><p className='all-button'>Thank you</p></Button>
+<Button onClick={() => handleCategoryChange('inspiration')}><p className='all-button'>Inspiration</p></Button>
 <Button onClick={handleOpenCreateForm}>Create New Board</Button>
 </div>
 <section className='kudo-board'>
