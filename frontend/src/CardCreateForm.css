@@ -31,9 +31,11 @@
     cursor: pointer;
     color: black;
   }
+
 .modal-content{
   height: fit-content;
 }
+
   h2 {
     margin-bottom: 20px;
     text-align: center;
@@ -85,6 +87,7 @@
   .gifImage:hover {
     border: 2px solid pink;
   }
+
   .images{
     display: flex;
     flex-wrap: wrap;

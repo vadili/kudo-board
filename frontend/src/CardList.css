@@ -3,9 +3,11 @@
     flex-direction:column;
     justify-content: center;
 }
+
 .card-list img {
     width: 200px;
 }
+
 .upvote-delete {
     display: flex;
     justify-content:center;

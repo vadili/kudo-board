@@ -45,7 +45,6 @@ function App() {
         return response.json();
       })
       .then(data => {
-        console.log('Boards fetched:', data);
         setBoards(data);
       })
       .catch(error => {
@@ -111,7 +110,7 @@ function App() {
   useEffect(() => {
     fetchBoards();
   }, []);
-  console.log(filteredItems)
+
   return (
     <div className="App">
       <Header />

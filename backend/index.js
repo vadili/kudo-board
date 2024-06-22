@@ -18,21 +18,6 @@ app.get('/boards', async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 })
-// async function handleRandomImg() {
-//     const apiKey = process.env.GIPHY_API_KEY;
-//     const imageURL = `https://api.giphy.com/v1/gifs/random?api_key=${apiKey}&tag=&rating=g`;
-//     try {
-//         const response = await fetch(imageURL);
-//         if (!response.ok) {
-//             throw new Error(`HTTP error! status: ${response.status}`);
-//         }
-//         const data = await response.json();
-//         return data.data.url;
-//     } catch (error) {
-//         console.error('Error fetching data:', error);
-//         return 'https://via.placeholder.com/150';
-//     }
-// };
 
 app.post('/boards', async (req, res) => {
     const { title, category, author } = req.body;
