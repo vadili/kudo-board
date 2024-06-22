@@ -1,9 +1,9 @@
 import "./SearchBar.css"
 
-function SearchBar() {
+function SearchBar({ searchTerm, setSearchTerm }) {
     return (
         <div className="searchbar">
-            <input type="text" placeholder="Search boards..." />
+            <input type="text" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} placeholder="Search boards..." />
         </div>
     )
 }
