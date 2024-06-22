@@ -1,36 +1,17 @@
-import { useState } from "react";
-import Button from "./Button";
-import "./CardList.css";
+// CardList.jsx
+import React from 'react';
 
-function CardList(props) {
-    const [votecount, setvotecount] = useState(0)
-    function handlevote() {
-        setvotecount( (prev)=> prev + 1 )
-
-    }
+function CardList({ cards, onDelete }) {
     return (
-        <div className = "card-list">
-            <h4>{props.title}</h4>
-
-            <div>
-                <p>Card Name</p>
-                <img src="https://media4.giphy.com/media/3o85xKzvhRWSlOE7xC/giphy.gif?cid=72ae070coek11rqvv0lak5zd0kot76k8nlteot8rk0406dvy&ep=v1_gifs_search&rid=giphy.gif&ct=g"/>
-                <div className = "upvote-delete">
-                    <Button name={`Upvote: ${votecount}`} onClick = {handlevote} />
-                    <Button name="delete"/>
-
+        <div>
+            {cards.map(card => (
+                <div key={card.id}>
+                    <p>{card.title}</p> {/* Assuming 'title' is the property you want to display */}
+                    <button onClick={() => onDelete(card.id)}>Delete</button>
                 </div>
-
-            </div>
-
-
-
-
-
+            ))}
         </div>
-
-
-    )
+    );
 }
 
 export default CardList;

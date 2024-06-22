@@ -24,12 +24,10 @@ app.get('/boards', async (req, res) => {
 
 // Create a new board
 app.post('/boards', async (req, res) => {
-    const { title, category, author, image } = req.body;
+    const { title, category, author } = req.body;
     try {
-        // Example of integrating with an external API (Giphy) to fetch random GIFs
-        const giphyResponse = await fetch(`https://api.giphy.com/v1/gifs/random?api_key=${process.env.GIPHY_API_KEY}`);
-        const gifData = await giphyResponse.json();
-        const imageURL = gifData.data.images.original.url;
+        // Placeholder for imageURL, since we are not fetching from an external API
+        const imageURL = "https://via.placeholder.com/150";
 
         const newBoard = await prisma.board.create({
             data: {
@@ -65,16 +63,16 @@ app.delete('/boards/:id', async (req, res) => {
 // Create a new card for a specific board
 app.post('/boards/:id/cards', async (req, res) => {
     const { id } = req.params;
-    const { title, description, upvote, imageUrl, author } = req.body;
+    const { message, gifUrl, textMessage, isSigned } = req.body;
     try {
-        const newCard = await prisma.kudoCard.create({
+        const newCard = await prisma.card.create({
             data: {
-                title,
-                description,
-                upvote,
-                imgUrl: imageUrl,
-                author,
-                board: { connect: { id: parseInt(id) } },
+                message,
+                gifUrl,
+                textMessage,
+                isSigned,
+                upvotes: 0, // Initialize upvotes to 0
+                boardId: parseInt(id),
             },
         });
         res.status(201).json(newCard);
@@ -84,11 +82,30 @@ app.post('/boards/:id/cards', async (req, res) => {
     }
 });
 
+// Upvote a card
+app.put('/cards/:id/upvote', async (req, res) => {
+    const { id } = req.params;
+    try {
+        const card = await prisma.card.update({
+            where: { id: parseInt(id) },
+            data: {
+                upvotes: {
+                    increment: 1,
+                },
+            },
+        });
+        res.status(200).json(card);
+    } catch (error) {
+        console.error('Error upvoting card:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
 // Get all cards for a specific board
 app.get('/boards/:id/cards', async (req, res) => {
     const { id } = req.params;
     try {
-        const cards = await prisma.kudoCard.findMany({
+        const cards = await prisma.card.findMany({
             where: { boardId: parseInt(id) },
         });
         res.status(200).json(cards);
@@ -99,11 +116,11 @@ app.get('/boards/:id/cards', async (req, res) => {
 });
 
 // Delete a card by ID
-app.delete('/cards/:id', async (req, res) => {
-    const { id } = req.params;
+app.delete('/boards/:boardId/cards/:cardId', async (req, res) => {
+    const { boardId, cardId } = req.params;
     try {
-        const deletedCard = await prisma.kudoCard.delete({
-            where: { id: parseInt(id) },
+        const deletedCard = await prisma.card.delete({
+            where: { id: parseInt(cardId) },
         });
         res.status(200).json(deletedCard);
     } catch (error) {
@@ -122,6 +139,9 @@ app.get('/boards/:id', async (req, res) => {
     try {
         const board = await prisma.board.findUnique({
             where: { id: parseInt(id) },
+            include: {
+                cards: true,
+            },
         });
         if (!board) {
             return res.status(404).json({ error: 'Board not found' });
@@ -132,6 +152,8 @@ app.get('/boards/:id', async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
+
+
 
 const PORT = process.env.PORT || 3002;
 app.listen(PORT, () => {

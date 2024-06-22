@@ -1,0 +1,5 @@
+.card-container {
+    border: 2px solid black; /* Adds a black border */
+    padding: 10px;
+    margin: 10px;
+}
