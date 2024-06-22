@@ -1,16 +1,15 @@
-import React from "react";
+import React from 'react';
 
-function Card({ card, onUpvote, onDelete }) {
-    return (
-      <div className="card">
-        <h4>{card.title}</h4>
-        <p>{card.description}</p>
-        <img src={card.gifUrl} alt="Card GIF" />
-        <p>Author: {card.author || "Anonymous"}</p>
-        <button onClick={() => onUpvote(card.id)}>Upvote ({card.upvote})</button>
-        <button onClick={() => onDelete(card.id)}>Delete</button>
-      </div>
-    );
-  }
+function Card({ card}) {
+  return (
+    <div className='card-container'>
+      <h2>{card.message}</h2>
+      <img src={card.gifUrl} alt={card.message} />
+      {card.textMessage && <p>{card.textMessage}</p>}
+      <p>Signed: {card.isSigned ? 'Yes' : 'No'}</p>
+      <p>Upvotes: {card.upvotes}</p>
+    </div>
+  );
+}
 
-  export default Card;
+export default Card;
