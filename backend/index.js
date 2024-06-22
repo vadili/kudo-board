@@ -7,155 +7,140 @@ const app = express();
 const prisma = new PrismaClient();
 
 app.use(cors());
-app.use(bodyParser.json()); // Use bodyParser to parse JSON bodies
+app.use(bodyParser.json());
 
-// CRUD for Boards
-
-// Get all boards
 app.get('/boards', async (req, res) => {
     try {
-        const boards = await prisma.board.findMany();
-        res.status(200).json(boards);
+    const boards = await prisma.board.findMany();
+    res.status(200).json(boards);
     } catch (error) {
-        console.error('Error fetching boards:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
+    console.error('Error fetching boards:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+}
 });
 
-// Create a new board
 app.post('/boards', async (req, res) => {
     const { title, category, author } = req.body;
     try {
-        // Placeholder for imageURL, since we are not fetching from an external API
-        const imageURL = "https://via.placeholder.com/150";
+    const imageURL = "https://via.placeholder.com/150";
 
-        const newBoard = await prisma.board.create({
-            data: {
-                title,
-                category,
-                author,
-                imageURL,
-            },
-        });
-        res.status(201).json(newBoard);
+    const newBoard = await prisma.board.create({
+    data: {
+    title,
+    category,
+    author,
+    imageURL,
+    },
+    });
+    res.status(201).json(newBoard);
     } catch (error) {
-        console.error('Error creating board:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
+    console.error('Error creating board:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
     }
 });
 
-// Delete a board by ID
 app.delete('/boards/:id', async (req, res) => {
     const { id } = req.params;
     try {
-        const deletedBoard = await prisma.board.delete({
-            where: { id: parseInt(id) },
-        });
-        res.status(200).json(deletedBoard);
+    const deletedBoard = await prisma.board.delete({
+    where: { id: parseInt(id) },
+    });
+    res.status(200).json(deletedBoard);
     } catch (error) {
-        console.error('Error deleting board:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
+    console.error('Error deleting board:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
     }
 });
 
-// CRUD for Cards
-
-// Create a new card for a specific board
 app.post('/boards/:id/cards', async (req, res) => {
     const { id } = req.params;
     const { message, gifUrl, textMessage, isSigned } = req.body;
     try {
-        const newCard = await prisma.card.create({
-            data: {
-                message,
-                gifUrl,
-                textMessage,
-                isSigned,
-                upvotes: 0, // Initialize upvotes to 0
-                boardId: parseInt(id),
-            },
-        });
-        res.status(201).json(newCard);
+    const newCard = await prisma.card.create({
+    data: {
+    message,
+    gifUrl,
+    textMessage,
+    isSigned,
+    upvotes: 0,
+    boardId: parseInt(id),
+    },
+    });
+    res.status(201).json(newCard);
     } catch (error) {
-        console.error('Error creating card:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
+    console.error('Error creating card:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
     }
 });
 
-// Upvote a card
 app.put('/cards/:id/upvote', async (req, res) => {
     const { id } = req.params;
     try {
-        const card = await prisma.card.update({
-            where: { id: parseInt(id) },
-            data: {
-                upvotes: {
-                    increment: 1,
-                },
-            },
-        });
-        res.status(200).json(card);
+    const card = await prisma.card.update({
+    where: { id: parseInt(id) },
+    data: {
+    upvotes: {
+    increment: 1,
+    },
+    },
+    });
+    res.status(200).json(card);
     } catch (error) {
-        console.error('Error upvoting card:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
+    console.error('Error upvoting card:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
     }
 });
 
-// Get all cards for a specific board
 app.get('/boards/:id/cards', async (req, res) => {
     const { id } = req.params;
     try {
-        const cards = await prisma.card.findMany({
-            where: { boardId: parseInt(id) },
-        });
-        res.status(200).json(cards);
+    const cards = await prisma.card.findMany({
+    where: { boardId: parseInt(id) },
+    });
+    res.status(200).json(cards);
     } catch (error) {
-        console.error('Error fetching cards:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
+    console.error('Error fetching cards:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
     }
 });
 
-// Delete a card by ID
 app.delete('/boards/:boardId/cards/:cardId', async (req, res) => {
     const { boardId, cardId } = req.params;
     try {
-        const deletedCard = await prisma.card.delete({
-            where: { id: parseInt(cardId) },
-        });
-        res.status(200).json(deletedCard);
+    const deletedCard = await prisma.card.delete({
+    where: { id: parseInt(cardId) },
+    });
+    res.status(200).json(deletedCard);
     } catch (error) {
-        console.error('Error deleting card:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
+    console.error('Error deleting card:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
     }
 });
 
-// Get a specific board by ID
 app.get('/boards/:id', async (req, res) => {
     const { id } = req.params;
     console.log("Requested board ID:", id);
     if (!id) {
-        return res.status(400).json({ error: 'No ID provided' });
+    return res.status(400).json({ error: 'No ID provided' });
     }
     try {
-        const board = await prisma.board.findUnique({
-            where: { id: parseInt(id) },
-            include: {
-                cards: true,
-            },
-        });
-        if (!board) {
-            return res.status(404).json({ error: 'Board not found' });
-        }
-        res.status(200).json(board);
+    const board = await prisma.board.findUnique({
+    where: { id: parseInt(id) },
+    include: {
+    cards: true,
+    },
+    });
+    if (!board) {
+    return res.status(404).json({ error: 'Board not found' });
+    }
+    res.status(200).json(board);
     } catch (error) {
-        console.error('Error fetching board:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
+    console.error('Error fetching board:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
     }
 });
 
-
-
 const PORT = process.env.PORT || 3002;
-app.listen(PORT, () => {
+    app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });

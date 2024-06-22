@@ -1,4 +1,3 @@
-// App.js
 import { useEffect, useState } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import './App.css';
@@ -17,129 +16,130 @@ function App() {
   const navigate = useNavigate();
 
   const handleCategoryChange = (category) => {
-    setSelectedCategory(category);
-  };
-
-  const filteredItems = selectedCategory === 'All' ? boards : boards.filter(item => item.category === selectedCategory);
-
-  const handleOpenCreateForm = () => {
-    setDisplayCreateForm(true);
-  };
-
-  const handleCloseCreateForm = () => {
-    setDisplayCreateForm(false);
-  };
-
-  const handleBoardSelect = (board) => {
-    navigate(`/boards/${board.id}`);
-  };
-
-  const fetchBoards = () => {
-    fetch(`${import.meta.env.VITE_BACKEND_ADDRESS}/boards`)
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-    })
-    .then(data => {
-        console.log('Boards fetched:', data);
-        setBoards(data);
-    })
-    .catch(error => {
-        console.error('Error fetching boards:', error);
-    });
+  setSelectedCategory(category);
 };
 
-  const handleCreateBoard = (newBoard) => {
-    fetch(`${import.meta.env.VITE_BACKEND_ADDRESS}/boards`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(newBoard),
-    })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then(data => {
-        fetchBoards();
-      })
-      .catch(error => {
-        console.error('Error creating board:', error);
-      });
-  };
+const filteredItems = selectedCategory === 'All' ? boards : boards.filter(item => item.category === selectedCategory);
 
-  const handleDeleteButton = (id) => {
-    fetch(`${import.meta.env.VITE_BACKEND_ADDRESS}/boards/${id}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then(response => {
-        if (response.ok) {
-          setBoards(boards.filter(board => board.id !== id));
-        } else {
-          console.error("Error deleting board");
-        }
-      })
-      .catch(error => {
-        console.error('Error deleting board: ', error);
-      });
-  };
+const handleOpenCreateForm = () => {
+  setDisplayCreateForm(true);
+};
 
-  const kudoboard = filteredItems.map(board => (
-    <Board
-      key={board.id}
-      id={board.id}
-      board={board}
-      imageURL={board.imageURL}
-      onDelete={() => handleDeleteButton(board.id)}
-      title={board.title}
-      category={board.category}
-      onBoardSelect={handleBoardSelect}
-      boards={filteredItems}
-    />
-  ));
+const handleCloseCreateForm = () => {
+  setDisplayCreateForm(false);
+};
 
-  useEffect(() => {
-    fetchBoards();
-  }, []);
+const handleBoardSelect = (board) => {
+  navigate(`/boards/${board.id}`);
+};
 
-  return (
-    <div className="App">
-      <Header />
-      <Routes>
-        <Route path='/' element={
-          <div>
-            {displayCreateForm ? (
-              <CreateForm onCreate={handleCreateBoard} onClose={handleCloseCreateForm} />
-            ) : null}
-            <main>
-              <SearchBar />
-              <div className="buttons">
-                <Button onClick={() => handleCategoryChange('All')}>All</Button>
-                <Button onClick={() => handleCategoryChange('Work')}>Work</Button>
-                <Button onClick={() => handleCategoryChange('Family')}>Family</Button>
-                <Button onClick={() => handleCategoryChange('Friends')}>Friends</Button>
-                <Button onClick={() => handleCategoryChange('Others')}>Others</Button>
-                <Button onClick={handleOpenCreateForm}>Create Board</Button>
-              </div>
-              <div className="board-container">
-                {kudoboard}
-              </div>
-            </main>
-            <Footer />
-          </div>
-        } />
-        <Route path='/boards/:id' element={<BoardPage />} />
-      </Routes>
-    </div>
-  );
+const fetchBoards = () => {
+  fetch(`${import.meta.env.VITE_BACKEND_ADDRESS}/boards`)
+  .then(response => {
+  if (!response.ok) {
+  throw new Error(`HTTP error! status: ${response.status}`);
+  }
+  return response.json();
+  })
+  .then(data => {
+  console.log('Boards fetched:', data);
+  setBoards(data);
+  })
+  .catch(error => {
+  console.error('Error fetching boards:', error);
+});
+};
+
+const handleCreateBoard = (newBoard) => {
+  fetch(`${import.meta.env.VITE_BACKEND_ADDRESS}/boards`, {
+  method: "POST",
+  headers: {
+  "Content-Type": "application/json",
+  },
+  body: JSON.stringify(newBoard),
+  })
+  .then(response => {
+  if (!response.ok) {
+  throw new Error(`HTTP error! status: ${response.status}`);
+  }
+  return response.json();
+  })
+  .then(data => {
+  fetchBoards();
+  })
+  .catch(error => {
+  console.error('Error creating board:', error);
+});
+};
+
+const handleDeleteButton = (id) => {
+  fetch(`${import.meta.env.VITE_BACKEND_ADDRESS}/boards/${id}`, {
+  method: "DELETE",
+  headers: {
+  "Content-Type": "application/json",
+  },
+  })
+  .then(response => {
+  if (response.ok) {
+  setBoards(boards.filter(board => board.id !== id));
+  } else {
+  console.error("Error deleting board");
+  }
+  })
+  .catch(error => {
+  console.error('Error deleting board: ', error);
+  });
+};
+
+const kudoboard = filteredItems.map(board => (
+  <Board
+  key={board.id}
+  id={board.id}
+  board={board}
+  imageURL={board.imageURL}
+  onDelete={() => handleDeleteButton(board.id)}
+  title={board.title}
+  category={board.category}
+  onBoardSelect={handleBoardSelect}
+  boards={filteredItems}
+/>
+));
+
+useEffect(() => {
+fetchBoards();
+}, []);
+
+return (
+<div className="App">
+<Header />
+<Routes>
+<Route path='/' element={
+<div>
+{displayCreateForm ? (
+<CreateForm onCreate={handleCreateBoard} onClose={handleCloseCreateForm} />
+) : null}
+<main>
+<SearchBar />
+<div className="buttons">
+<Button onClick={() => handleCategoryChange('All')}><p className='all-button'>All</p></Button>
+<Button onClick={() => handleCategoryChange('Work')}><p className='all-button'>Work</p></Button>
+<Button onClick={() => handleCategoryChange('Family')}><p className='all-button'>Family</p></Button>
+<Button onClick={() => handleCategoryChange('Friends')}><p className='all-button'>Friends</p></Button>
+<Button onClick={() => handleCategoryChange('Appreciation')}><p className='all-button'>Appreciation</p></Button>
+<Button onClick={() => handleCategoryChange('Farewell')}><p className='all-button'>Farewell</p></Button>
+<Button onClick={handleOpenCreateForm}>Create New Board</Button>
+</div>
+<section className='kudo-board'>
+{kudoboard}
+</section>
+</main>
+</div>
+} />
+<Route path='/boards/:id' element={<BoardPage />} />
+</Routes>
+<Footer />
+</div>
+);
 }
 
 export default App;

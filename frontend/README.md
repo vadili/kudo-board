@@ -9,26 +9,26 @@ Deployed Application (optional): [Kudos Board Deployed Site](ADD_LINK_HERE)
 
 #### CORE FEATURES
 
-- [ ] **Home Page**
-  - [ ] Displays header, banner, search, board grid, and footer.
-  - [ ] Displays preview of all boards on initial page load.
-    - [ ] Boards previews should show an image/gif and board title.
-  - [ ] Users can click on a category (recent, celebration, thank you, inspiration) to filter the boards.
-    - [ ] Recent displays most recently created boards.
-    - [ ] Other categories display boards of that type.
-  - [ ] Users can search for a board by name.
-  - [ ] Users can click on a board to navigate to a new page containing that board.
-  - [ ] Users can create a new board.
-    - [ ] Boards should have a title, category, and author (optional).
-  - [ ] User can delete boards.
+- [X] **Home Page**
+  - [X] Displays header, banner, search, board grid, and footer.
+  - [X] Displays preview of all boards on initial page load.
+    - [X] Boards previews should show an image/gif and board title.
+  - [X] Users can click on a category (recent, celebration, thank you, inspiration) to filter the boards.
+    - [] Recent displays most recently created boards.
+    - [X] Other categories display boards of that type.
+  - [] Users can search for a board by name.
+  - [X] Users can click on a board to navigate to a new page containing that board.
+  - [X] Users can create a new board.
+    - [X] Boards should have a title, category, and author (optional).
+  - [X] User can delete boards.
 
-- [ ] **Board Page**
-  - [ ] Displays a list of all cards for a board.
-    -  [ ] Each card features a text message.
+- [X] **Board Page**
+  - [X] Displays a list of all cards for a board.
+    -  [X] Each card features a text message.
     -  [ ] Each card features a gif found using the [GIPHY API](https://developers.giphy.com/docs/api/).
-    -  [ ] Users can optionally sign the card as the author.
+    -  [X] Users can optionally sign the card as the author.
 -   [ ] Cards can be upvoted.
--   [ ] Cards can be deleted.
+-   [X] Cards can be deleted.
 
 
 #### STRETCH FEATURES
@@ -57,17 +57,13 @@ Deployed Application (optional): [Kudos Board Deployed Site](ADD_LINK_HERE)
 
 * Did the topics discussed in your labs prepare you to complete the assignment? Be specific, which features in your weekly assignment did you feel unprepared to complete?
 
-Add your response here
+Yes, the topics discussed in the labs were of great help and significantly enhanced my understanding of the projects.
+
 
 * If you had more time, what would you have done differently? Would you have added additional features? Changed the way your project responded to a particular event, etc.
 
-Add your response here
+The time constraint for completing the project posed a significant challenge. Unfortunately, this led to a sense of rushing through tasks, impacting overall efficiency. Given more time, I would have been able to allocate resources towards refining the project's design.
 
 * Reflect on your project demo, what went well? Were there things that maybe didn't go as planned? Did you notice something that your peer did that you would like to try next time?
 
-Add your response here
-
-
-### Shout out
-
-Give a shout out to somebody from your cohort that especially helped you during your project. This can be a fellow peer, instructor, TA, mentor, etc.
+Despite the time limitations, the project demo went reasonably well. There were aspirations to incorporate supplementary features, which proved challenging due to the rushed nature of the process. In future endeavors, I aim to explore more creative avenues for visual representation within projects.

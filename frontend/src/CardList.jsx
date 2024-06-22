@@ -1,12 +1,14 @@
-// CardList.jsx
 import React from 'react';
+import Card from './Card';
 
 function CardList({ cards, onDelete }) {
     return (
         <div>
             {cards.map(card => (
                 <div key={card.id}>
-                    <p>{card.title}</p> {/* Assuming 'title' is the property you want to display */}
+                    <p>{card.message}</p>
+                    <img src={card.gifUrl} alt={card.message} />
+                    <p>{card.textMessage}</p>
                     <button onClick={() => onDelete(card.id)}>Delete</button>
                 </div>
             ))}

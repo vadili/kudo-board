@@ -1,99 +1,99 @@
-// BoardPage.jsx
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import CardList from "./CardList";
+import CardList from './CardList';
 import CardCreateForm from './CardCreateForm';
-import "./BoardPage.css";
+import Modal from './Modal';
+import './BoardPage.css';
 
-function BoardPage() {
-    const { id } = useParams();
-    const [board, setBoard] = useState(null);
-    const [cards, setCards] = useState([]);
+const BoardPage = () => {
+const { id } = useParams();
+const [board, setBoard] = useState(null);
+const [cards, setCards] = useState([]);
+const [displayCardCreateModal, setDisplayCardCreateModal] = useState(false);
 
-    const fetchCards = () => {
-        fetch(`${import.meta.env.VITE_BACKEND_ADDRESS}/boards/${id}/cards`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            // Check if data is an array
-            if (Array.isArray(data)) {
-                setCards(data);
-            } else {
-                console.error('Expected an array of cards, but got:', data);
-                setCards([]); // Set to empty array if response is not an array
-            }
-        })
-        .catch(error => {
-            console.error('Error fetching cards:', error);
-            setCards([]); // Set to empty array in case of error
-        });
-    };
+const fetchCards = () => {
+    fetch(`${import.meta.env.VITE_BACKEND_ADDRESS}/boards/${id}/cards`)
+    .then(response => response.json())
+    .then(data => {
+        if (Array.isArray(data)) {
+            setCards([]);
+        }
+    })
+    .catch (error => {
+        console.error (`Error fetching cards:`, error);
+        setCards([]);
+    });
 
-    useEffect(() => {
-        fetch(`${import.meta.env.VITE_BACKEND_ADDRESS}/boards/${id}`)
-            .then(response => response.json())
-            .then(data => {
-                setBoard(data);
-                fetchCards(); // Fetch cards when the board is loaded
-            })
-            .catch(error => console.error('Error fetching board:', error));
+};
+
+useEffect(() => {
+    fetch(`${import.meta.env.VITE_BACKEND_ADDRESS}/boards/${id}`)
+    .then(response => {
+        if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Board data:', data);
+        setBoard(data);
+        fetchCards();
+    })
+    .catch(error => {
+        console.error('Error fetching board:', error);
+    });
     }, [id]);
+
+    if (!board) {
+    return <div>Loading...</div>;
+    }
 
     const handleCreateCard = (newCard) => {
         fetch(`${import.meta.env.VITE_BACKEND_ADDRESS}/boards/${id}/cards`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(newCard),
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newCard),
         })
-            .then(response => response.json())
-            .then(data => {
-                setCards([...cards, data]);
-            })
-            .catch(error => console.error('Error creating card:', error));
-    };
+        .then(response => response.json())
+        .then(data => {
+        setCards([...cards, data]);
+        setDisplayCardCreateModal(false);
+        })
+        .catch(error => console.error('Error creating card:', error));
+        };
 
-    const handleDeleteCard = (cardId) => {
-        const url = `${import.meta.env.VITE_BACKEND_ADDRESS}/boards/${id}/cards/${cardId}`;
-        console.log("Deleting card with URL:", url); // Log the URL to check correctness
-        fetch(url, {
-            method: 'DELETE',
+        const handleDeleteCard = (cardId) => {
+        fetch(`${import.meta.env.VITE_BACKEND_ADDRESS}/boards/${id}/cards/${cardId}`, {
+        method: 'DELETE',
         })
         .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            // Remove the card from state after successful deletion
-            const updatedCards = cards.filter(card => card.id !== cardId);
-            setCards(updatedCards);
+        if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const updatedCards = cards.filter(card => card.id !== cardId);
+        setCards(updatedCards);
         })
         .catch(error => console.error('Error deleting card:', error));
-    };
+        };
 
-    if (!board) {
+        if (!board) {
         return <div>Loading...</div>;
-    }
+        }
 
-    return (
+        return (
         <div className="board-page">
-            <h2>{board.title}</h2>
-            <p>{board.category}</p>
-            <CardCreateForm onCreate={handleCreateCard} />
-
-            {/* Ensure cards are rendered */}
-            {cards.length > 0 ? (
-                <CardList
-                    cards={cards}
-                    onDelete={handleDeleteCard}
-                />
-            ) : (
-                <div>No cards found.</div>
-            )}
+        <h2>{board.title}</h2>
+        <p>{board.category}</p>
+        <button onClick={() => setDisplayCardCreateModal(true)}>Create Card</button>
+        <Modal isOpen={displayCardCreateModal} onClose={() => setDisplayCardCreateModal(false)}>
+        <CardCreateForm onCreate={handleCreateCard} />
+        </Modal>
+        <CardList
+        cards={cards}
+        onDelete={handleDeleteCard}
+        />
         </div>
-    );
-}
+        );
+        }
 
-export default BoardPage;
+        export default BoardPage;
