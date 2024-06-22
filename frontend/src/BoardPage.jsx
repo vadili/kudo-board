@@ -6,94 +6,114 @@ import Modal from './Modal';
 import './BoardPage.css';
 
 const BoardPage = () => {
-const { id } = useParams();
-const [board, setBoard] = useState(null);
-const [cards, setCards] = useState([]);
-const [displayCardCreateModal, setDisplayCardCreateModal] = useState(false);
+    const { id } = useParams();
+    const [board, setBoard] = useState(null);
+    const [cards, setCards] = useState([]);
+    const [displayCardCreateModal, setDisplayCardCreateModal] = useState(false);
+    console.log(id)
+    const fetchCards = () => {
+        fetch(`${import.meta.env.VITE_BACKEND_ADDRESS}/boards/${id}/cards`)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                if (Array.isArray(data)) {
+                    setCards(data);
+                }
+            })
+            .catch(error => {
+                console.error(`Error fetching cards:`, error);
+                setCards([]);
+            });
 
-const fetchCards = () => {
-    fetch(`${import.meta.env.VITE_BACKEND_ADDRESS}/boards/${id}/cards`)
-    .then(response => response.json())
-    .then(data => {
-        if (Array.isArray(data)) {
-            setCards([]);
-        }
-    })
-    .catch (error => {
-        console.error (`Error fetching cards:`, error);
-        setCards([]);
-    });
+    };
 
-};
-
-useEffect(() => {
-    fetch(`${import.meta.env.VITE_BACKEND_ADDRESS}/boards/${id}`)
-    .then(response => {
-        if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-    })
-    .then(data => {
-        console.log('Board data:', data);
-        setBoard(data);
-        fetchCards();
-    })
-    .catch(error => {
-        console.error('Error fetching board:', error);
-    });
+    useEffect(() => {
+        fetch(`${import.meta.env.VITE_BACKEND_ADDRESS}/boards/${id}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Board data:', data);
+                setBoard(data);
+                fetchCards();
+            })
+            .catch(error => {
+                console.error('Error fetching board:', error);
+            });
     }, [id]);
 
     if (!board) {
-    return <div>Loading...</div>;
+        return <div>Loading...</div>;
     }
 
     const handleCreateCard = (newCard) => {
         fetch(`${import.meta.env.VITE_BACKEND_ADDRESS}/boards/${id}/cards`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newCard),
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(newCard),
         })
-        .then(response => response.json())
-        .then(data => {
-        setCards([...cards, data]);
-        setDisplayCardCreateModal(false);
-        })
-        .catch(error => console.error('Error creating card:', error));
-        };
+            .then(response => response.json())
+            .then(data => {
+                setCards([...cards, data]);
+                setDisplayCardCreateModal(false);
+            })
+            .catch(error => console.error('Error creating card:', error));
+    };
 
-        const handleDeleteCard = (cardId) => {
+    const handleDeleteCard = (cardId) => {
         fetch(`${import.meta.env.VITE_BACKEND_ADDRESS}/boards/${id}/cards/${cardId}`, {
-        method: 'DELETE',
+            method: 'DELETE',
         })
-        .then(response => {
-        if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const updatedCards = cards.filter(card => card.id !== cardId);
-        setCards(updatedCards);
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const updatedCards = cards.filter(card => card.id !== cardId);
+                setCards(updatedCards);
+            })
+            .catch(error => console.error('Error deleting card:', error));
+    };
+    const handleUpvote = (cardId) => {
+        fetch(`${import.meta.env.VITE_BACKEND_ADDRESS}/cards/${cardId}/upvote`, {
+            method: 'PUT',
         })
-        .catch(error => console.error('Error deleting card:', error));
-        };
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const updatedCards = cards.map(item => {
+                    if (item.id === cardId) {
+                        return { ...item, upvotes: item.upvotes + 1 };
+                    }
+                    return item;
+                });
+                setCards(updatedCards);
+            })
+            .catch(error => console.error('Error deleting card:', error));
+    };
 
-        if (!board) {
+    if (!board) {
         return <div>Loading...</div>;
-        }
+    }
 
-        return (
+    return (
         <div className="board-page">
-        <h2>{board.title}</h2>
-        <p>{board.category}</p>
-        <button onClick={() => setDisplayCardCreateModal(true)}>Create Card</button>
-        <Modal isOpen={displayCardCreateModal} onClose={() => setDisplayCardCreateModal(false)}>
-        <CardCreateForm onCreate={handleCreateCard} />
-        </Modal>
-        <CardList
-        cards={cards}
-        onDelete={handleDeleteCard}
-        />
+            <h2>{board.title}</h2>
+            <p>{board.category}</p>
+            <button onClick={() => setDisplayCardCreateModal(true)}>Create Card</button>
+            <Modal isOpen={displayCardCreateModal} onClose={() => setDisplayCardCreateModal(false)}>
+                <CardCreateForm onCreate={handleCreateCard} />
+            </Modal>
+            <CardList
+                cards={cards}
+                onDelete={handleDeleteCard}
+                onUpvote={handleUpvote}
+            />
         </div>
-        );
-        }
+    );
+}
 
-        export default BoardPage;
+export default BoardPage;
