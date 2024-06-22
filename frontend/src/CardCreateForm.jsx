@@ -17,8 +17,6 @@ function CardCreateForm({ onCreate }) {
 
     useEffect(() => {
         async function loadGiphy() {
-            // const apiKey = import.meta.env.GIPHY_API_KEY;
-            // console.log(apiKey)
             const image = `https://api.giphy.com/v1/gifs/search?api_key=WCwyDczGY7JYevOksSE2WVrT6zDHewZ2&q=${searchURL}&limit=10&offset=0&rating=g&lang=en&bundle=messaging_non_clips`;
             try {
                 const response = await fetch(image);

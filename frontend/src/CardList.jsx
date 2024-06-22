@@ -9,11 +9,7 @@ function CardList({ cards, onDelete, onUpvote }) {
                     key={card.id}
                     onDelete={() => onDelete(card.id)}
                     onUpvote={() => onUpvote(card.id)}
-
-
-
                 />
-
             ))}
         </div>
     );

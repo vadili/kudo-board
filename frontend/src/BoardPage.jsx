@@ -10,12 +10,10 @@ const BoardPage = () => {
     const [board, setBoard] = useState(null);
     const [cards, setCards] = useState([]);
     const [displayCardCreateModal, setDisplayCardCreateModal] = useState(false);
-    console.log(id)
     const fetchCards = () => {
         fetch(`${import.meta.env.VITE_BACKEND_ADDRESS}/boards/${id}/cards`)
             .then(response => response.json())
             .then(data => {
-                console.log(data)
                 if (Array.isArray(data)) {
                     setCards(data);
                 }
@@ -36,7 +34,6 @@ const BoardPage = () => {
                 return response.json();
             })
             .then(data => {
-                console.log('Board data:', data);
                 setBoard(data);
                 fetchCards();
             })
@@ -76,6 +73,7 @@ const BoardPage = () => {
             })
             .catch(error => console.error('Error deleting card:', error));
     };
+
     const handleUpvote = (cardId) => {
         fetch(`${import.meta.env.VITE_BACKEND_ADDRESS}/cards/${cardId}/upvote`, {
             method: 'PUT',

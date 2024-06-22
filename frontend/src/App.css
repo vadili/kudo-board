@@ -12,6 +12,7 @@
     align-items: center;
     flex: 1;
   }
+
   .buttons {
     justify-content: center;
     display: flex;

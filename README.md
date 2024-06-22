@@ -14,9 +14,9 @@ Deployed Application (optional): [Kudos Board Deployed Site](ADD_LINK_HERE)
   - [X] Displays preview of all boards on initial page load.
     - [X] Boards previews should show an image/gif and board title.
   - [X] Users can click on a category (recent, celebration, thank you, inspiration) to filter the boards.
-    - [] Recent displays most recently created boards.
+    - [X] Recent displays most recently created boards.
     - [X] Other categories display boards of that type.
-  - [] Users can search for a board by name.
+  - [X] Users can search for a board by name.
   - [X] Users can click on a board to navigate to a new page containing that board.
   - [X] Users can create a new board.
     - [X] Boards should have a title, category, and author (optional).
@@ -25,9 +25,9 @@ Deployed Application (optional): [Kudos Board Deployed Site](ADD_LINK_HERE)
 - [X] **Board Page**
   - [X] Displays a list of all cards for a board.
     -  [X] Each card features a text message.
-    -  [ ] Each card features a gif found using the [GIPHY API](https://developers.giphy.com/docs/api/).
+    -  [X] Each card features a gif found using the [GIPHY API](https://developers.giphy.com/docs/api/).
     -  [X] Users can optionally sign the card as the author.
--   [ ] Cards can be upvoted.
+-   [X] Cards can be upvoted.
 -   [X] Cards can be deleted.
 
 
@@ -49,9 +49,15 @@ Deployed Application (optional): [Kudos Board Deployed Site](ADD_LINK_HERE)
 
 ### Walkthrough Video
 
-`TODO://` Add the embedded URL code to your animated app walkthrough below, `ADD_EMBEDDED_CODE_HERE`. Make sure the video or gif actually renders and animates when viewing this README. (🚫 Remove this paragraph after adding walkthrough video)
 
-`ADD_EMBEDDED_CODE_HERE`
+`<div>
+    <a href="https://www.loom.com/share/4faa6f24a74c4601870bd8eb85760036">
+      <p>Library | Loom - 22 June 2024 - Watch Video</p>
+    </a>
+    <a href="https://www.loom.com/share/4faa6f24a74c4601870bd8eb85760036">
+      <img style="max-width:300px;" src="https://cdn.loom.com/sessions/thumbnails/4faa6f24a74c4601870bd8eb85760036-with-play.gif">
+    </a>
+  </div>`
 
 ### Reflection
 
